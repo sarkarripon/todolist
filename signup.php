@@ -55,6 +55,7 @@ if(isset($_SESSION['loggedInUser'])){
                                 <label for="password">Retype Password</label>
                             </div>
                             <br>
+
                             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
                             <p class="mt-5 mb-3 text-muted">Have an account? <a href="login.php">Login</a></p>
                         </form>
