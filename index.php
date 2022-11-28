@@ -52,9 +52,11 @@ $_SESSION['open_modal'] = "1";
                </tr>
                         </thead>
                         <tbody>
+                        <?php $rowcount = 1; ?>
+                        <?php asort($rows);?>
                         <?php foreach ($rows as $row): ?>
                         <tr>
-                            <th><?php echo $row['id']; ?></th>
+                            <th><?php echo $rowcount++; ?></th>
                             <td><?php echo $row['title']; ?></td>
                             <td>
 
