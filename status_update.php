@@ -1,5 +1,11 @@
 <?php
 session_start();
+//var_dump($_REQUEST); exit();
+if (!isset($_POST['task_status'])) {
+    header('Location:index.php');
+    exit();
+}
+
 
 $status = $_POST['task_status'];
 $id = $_POST['id'];

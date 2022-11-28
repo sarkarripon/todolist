@@ -22,7 +22,7 @@ if (isset($_GET['orderBy']) && in_array($_GET['orderBy'], $orderBy)) {
     $order = $_GET['orderBy'];
 }
 require 'connection.php';
-$query = 'SELECT * FROM todo_tasks ORDER BY '.$order;
+$query = 'SELECT * FROM todo_tasks ORDER BY ' . $order;
 
 // retrieve and show the data :)
 ?>

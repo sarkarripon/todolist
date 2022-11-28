@@ -1,6 +1,7 @@
 <?php session_start(); ?>
 <!doctype html>
 <html lang="en" class="h-100">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,40 +18,46 @@
 </head>
 
 <body class="d-flex flex-column h-100">
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">ToDoList</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">ToDoList</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarScroll">
-            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                <?php if(isset($_SESSION['loggedInUser'])): ?>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <?php if (isset($_SESSION['loggedInUser'])) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.php?id=<?php echo $_SESSION['loggedInUser']['id']; ?>"> <?php echo $_SESSION['loggedInUser']['first_name']; ?>'s profile (<?php echo ucfirst($_SESSION['loggedInUser']['role']); ?>) </a>
+                        </li>
+                    <?php endif; ?>
 
-                 <li class="nav-item">
-                    <a class="nav-link" href="profile.php?id=<?php echo $_SESSION['loggedInUser']['id'];?>"> <?php echo $_SESSION['loggedInUser']['first_name'];?>'s profile </a>
-                </li>
+                    <?php if (isset($_SESSION['loggedInUser']['role']) && $_SESSION['loggedInUser']['role'] == 'admin') : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="allMember.php">All Users</a>
+                        </li>
+                    <?php endif; ?>
 
-                <?php endif;?>
-                <?php if(!isset($_SESSION['loggedInUser'])): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
-                </li>
-                <?php endif;?>
-                <?php if(!isset($_SESSION['loggedInUser'])): ?>
-                <li class="nav-item">
-                    <a class="nav-link " href="signup.php">Signup</a>
-                </li>
-                <?php endif;?>
-            </ul>
-            <?php if(isset($_SESSION['loggedInUser'])): ?>
-            <form class="d-flex" action="logout.php" method="POST">
-                <input type="hidden" name="logoutid" value="<?php echo $_SESSION['loggedInUser']['id'];?>">
-                <button class="btn btn-outline-danger" type="submit" >Logout</button>
+                    <?php if (!isset($_SESSION['loggedInUser'])) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.php">Login</a>
+                        </li>
+                    <?php endif; ?>
 
-            </form>
-            <?php endif;?>
+                    <?php if (!isset($_SESSION['loggedInUser'])) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link " href="signup.php">Signup</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+                <?php if (isset($_SESSION['loggedInUser'])) : ?>
+                    <form class="d-flex" action="logout.php" method="POST">
+                        <input type="hidden" name="logoutid" value="<?php echo $_SESSION['loggedInUser']['id']; ?>">
+                        <button class="btn btn-outline-danger" type="submit">Logout</button>
+
+                    </form>
+                <?php endif; ?>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>

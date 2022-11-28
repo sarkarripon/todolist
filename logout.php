@@ -10,5 +10,3 @@ if (isset($_POST['logoutid'])) {
     header("location:login.php");
 
 }
-
-?>

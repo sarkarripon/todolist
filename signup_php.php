@@ -19,18 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $inputArray['lname']    = user_input($_POST["lname"]);
         $_SESSION['lnameValue'] = $inputArray['lname'];
         unset($_SESSION['lnameErr']);
-
     } else {
-        $lnameErr= "Last Name is required";
+        $lnameErr = "Last Name is required";
         $_SESSION['lnameErr'] = $lnameErr;
         unset($_SESSION['lnameValue']);
-
     }
     if (isset($_POST["email"]) && !empty($_POST["email"])) {
         $inputArray['email']    = user_input($_POST["email"]);
         $_SESSION['emailValue'] = $inputArray['email'];
         unset($_SESSION['emailErr']);
-
     } else {
         $emailErr  = "Valid Email is required";
         $_SESSION['emailErr'] = $emailErr;
@@ -41,12 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $passwordErr = "Password is required";
         $_SESSION['passwordErr'] = $passwordErr;
         unset($_SESSION['passwordValue']);
-
     } else if (!empty($_POST["password"]) && strlen($_POST["password"]) < 8) {
         $passwordErr  = "Password must be 8 characters long";
         $_SESSION['passwordErr'] = $passwordErr;
         unset($_SESSION['passwordValue']);
-
     } else if ($_POST["password"] != $_POST["re_password"]) {
         $passwordErr  = "Password does not matched";
         $_SESSION['passwordErr'] = $passwordErr;
@@ -58,7 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    if ($_SESSION['fnameValue'] &&
+    if (
+        $_SESSION['fnameValue'] &&
         $_SESSION['lnameValue'] &&
         $_SESSION['emailValue'] &&
         $_SESSION['passwordValue']
@@ -67,13 +63,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         dataStore($inputArray);
         $_SESSION['success_msg'] = "Registration Successful! Please Login now";
         header("Location: login.php");
-
     } else {
         header('Location:signup.php');
         exit;
     }
-
-
 }
 
 function dataStore($rows)
@@ -85,15 +78,15 @@ function dataStore($rows)
     $email        = $rows["email"];
     $password     = $rows["password"];
     $member_since = $rows["member_since"];
+    $role = "member";
 
-    $sql = "INSERT INTO todo_users (first_name, last_name, email, password, member_since) VALUES ('$fname','$lname','$email','$password','$member_since')";
+    $sql = "INSERT INTO todo_users (first_name, last_name, email, password, member_since, role) VALUES ('$fname','$lname','$email','$password','$member_since', '$role')";
 
     if ($conn->query($sql) === TRUE) {
         return true;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-
 }
 
 function user_input($signupData)
@@ -103,4 +96,3 @@ function user_input($signupData)
     $signupData = htmlspecialchars($signupData);
     return $signupData;
 }
-

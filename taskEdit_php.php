@@ -1,12 +1,11 @@
 <?php
-//Task is being submitted from index Modal
 session_start();
 require 'connection.php';
-$tasktitle = $taskDesc = "";
+$id = $_POST['id'];
+$tasktitle  = $taskDesc = "";
 date_default_timezone_set('Asia/Dhaka');
-$created_at = date('Y-m-d H:i:s');
-$created_by = $_SESSION['loggedInUser']['id'];
-$status = 'active';
+$updated_at = date('Y-m-d H:i:s');
+
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,10 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $taskDesc = ($_POST["taskDesc"]);
     }
 
-    $sql = "INSERT INTO todo_tasks (title, description, created_at, created_by, status) VALUES ('$tasktitle','$taskDesc','$created_at', '$created_by','$status')";
+    $sql = "UPDATE todo_tasks SET title = '$tasktitle', description ='$taskDesc', updated_at = '$updated_at' where id='$id'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['record_msg'] = "Record created Successfully!";
+        $_SESSION['recordUpdate_msg'] = "Record Updated Successfully!";
         header('Location:index.php');
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
