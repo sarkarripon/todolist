@@ -10,13 +10,13 @@ $updated_at = date('Y-m-d H:i:s');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["tasktitle"]) && !empty($_POST["tasktitle"])) {
-        $tasktitle = ($_POST["tasktitle"]);
+        $tasktitle = $_POST["tasktitle"];
     }
     if (isset($_POST["taskDesc"]) && !empty($_POST["taskDesc"])) {
-        $taskDesc = ($_POST["taskDesc"]);
+        $taskDesc = $_POST["taskDesc"];
     }
 
-    $sql = "UPDATE todo_tasks SET title = '$tasktitle', description ='$taskDesc', updated_at = '$updated_at' where id='$id'";
+    $sql = "UPDATE todo_tasks SET title = '$tasktitle', description= '$taskDesc' where id=$id";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['recordUpdate_msg'] = "Record Updated Successfully!";
@@ -25,3 +25,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+
+//, updated_at = '$updated_at'

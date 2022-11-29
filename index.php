@@ -5,6 +5,28 @@ if (!isset($_SESSION['loggedInUser'])) {
     header('Location:login.php');
     exit;
 }
+require 'connection.php';
+$id   = $_SESSION['loggedInUser']['id'];
+$role = $_SESSION['loggedInUser']['role'];
+
+//if ($role == 'admin') {
+//    $sql = "SELECT * FROM todo_tasks ORDER BY status ASC";
+//} else {
+//    $sql = "SELECT * FROM todo_tasks WHERE created_by = $id ORDER BY status ASC";
+//}
+//
+//$result = $conn->query($sql);
+//$rows   = $result->fetch_all(MYSQLI_ASSOC);
+
+if ($role == 'admin') {
+    $sql = "SELECT todo_tasks.*, todo_users.first_name, todo_users.last_name, todo_users.id as memberId FROM todo_tasks LEFT JOIN todo_users ON todo_tasks.created_by = todo_users.id ORDER BY status ASC";
+} else {
+    $sql = "SELECT * FROM todo_tasks WHERE created_by = $id ORDER BY status ASC";
+}
+$result = $conn->query($sql);
+$rows   = $result->fetch_all(MYSQLI_ASSOC);
+//echo "<pre>"; print_r($rows); exit();
+
 $_SESSION['open_modal'] = "1";
 ?>
 <!-- Begin page content -->
@@ -32,25 +54,9 @@ $_SESSION['open_modal'] = "1";
                         <?php endif; ?>
 
 
-                        <?php
-                        require 'connection.php';
-                        $id = $_SESSION['loggedInUser']['id'];
-                        $role = $_SESSION['loggedInUser']['role'];
-
-                        if ($role == 'admin') {
-                            $sql = "SELECT * FROM todo_tasks ORDER BY status ASC";
-                        } else {
-                            $sql = "SELECT * FROM todo_tasks WHERE created_by = $id ORDER BY status ASC";
-                        }
-
-                        $result = $conn->query($sql);
-                        $rows = $result->fetch_all(MYSQLI_ASSOC);
-
-                        ?>
-
-                        <h4 class="text-center my-3 pb-3">Task list</h4>
                         <form>
                             <div class="text-end p-3 col-12 ">
+                                <h4 class="text-center my-3 pb-3">Task list</h4>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newtask">Create task</button>
                             </div>
@@ -61,8 +67,12 @@ $_SESSION['open_modal'] = "1";
                                 <tr>
                                     <th scope="col">No.</th>
                                     <th scope="col">Todo item</th>
+                                    <th scope="col">Description</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Change Status</th>
+                                    <?php if ($role == 'admin') : ?>
+                                    <th scope="col">Owner</th>
+                                    <?php endif; ?>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -70,10 +80,18 @@ $_SESSION['open_modal'] = "1";
                                 <?php $rowcount = 1; ?>
                                 <?php foreach ($rows as $row) : ?>
                                     <tr>
+
                                         <th><?php echo $rowcount++; ?></th>
                                         <td><?php echo $row['title']; ?></td>
-                                        <td>
+                                        <td><?php
+                                            if (strlen($row['description'])>=200){
+                                                echo substr($row['description'],0,20)."...";
+                                            } else{
+                                                echo $row['description'];
+                                            } ?>
+                                        </td>
 
+                                        <td>
                                             <p>
                                                 <?php if ($row['status'] == 'active') : ?>
                                                     <span class="badge bg-danger"><?php echo $row['status'] ?></span>
@@ -85,8 +103,6 @@ $_SESSION['open_modal'] = "1";
 
                                             </p>
                                         </td>
-
-
                                         <td>
                                             <form action="status_update.php" method="POST">
                                                 <select name="task_status" id="">
@@ -100,6 +116,10 @@ $_SESSION['open_modal'] = "1";
                                             </form>
 
                                         </td>
+
+                                         <?php if ($role == 'admin') : ?>
+                                             <td> <a href="profile.php?id=<?php echo $row['memberId']; ?>"> <?php echo $row['first_name']. " ".$row['last_name'] ?> </a></td>
+                                         <?php endif; ?>
                                         <td>
                                             <form action="taskEdit.php" method="POST">
                                                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">

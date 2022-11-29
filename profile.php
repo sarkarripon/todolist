@@ -6,15 +6,25 @@ if (!isset($_SESSION['loggedInUser'])) {
 }
 
 require 'connection.php';
-$id = $_SESSION['loggedInUser']['id'];
+//$id = $_SESSION['loggedInUser']['id'];
+$id = $_GET['id'];
 $sql = "SELECT * FROM todo_users where id= $id";
 $result = $conn->query($sql);
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
 
 ?>
-<section class="vh-100 w-auto p-3" style="background-color: #eee;">
+<section class=" w-auto p-3" style="background-color: #eee;">
     <div class="container-sm">
+
+        <?php if (isset($_SESSION['profileUpdate_msg'])) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong> <?php echo $_SESSION['profileUpdate_msg'] ?>
+                <?php unset($_SESSION['profileUpdate_msg']); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
         <?php foreach ($rows as $row) : ?>
             <div class="row">
                 <div class="col-lg-4">
@@ -26,15 +36,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             <p class="text-muted mb-1"><?php echo ucfirst($_SESSION['loggedInUser']['role']); ?> since:</p>
                             <p class="text-muted mb-4"><?php echo date('j F, Y. g:i a', strtotime($row['member_since'])); ?></p>
                             <div class="d-flex justify-content-center mb-2">
-                                <a type="button" class="btn btn-warning" href="edit.php">Edit</a>
-
-                                <!--                                --><?php //if(isset($_SESSION['loggedInUser']['role']) && $_SESSION['loggedInUser']['role'] == 'admin'):
-                                                                        ?>
-                                <!--                                <a type="button" class="btn btn-danger ms-1" onclick="return confirm('Are you sure to delete?')" href="deleteProfile_php.php?id=--><?php //echo $_SESSION['loggedInUser']['id'];
-                                                                                                                                                                                                        ?>
-                                <!--">Delete</a>-->
-                                <!--                                --><?php //endif;
-                                                                        ?>
+                                <a type="button" class="btn btn-warning" href="editProfile.php?id=<?php echo $row['id']. "&source=member";?>">Edit</a>
                             </div>
                         </div>
                     </div>
@@ -91,8 +93,8 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
 
                     <?php
                     require 'connection.php';
-                    $id = $_SESSION['loggedInUser']['id'];
-                    $sql = "SELECT * FROM todo_tasks WHERE created_by = $id ORDER BY created_at ASC LIMIT 3";
+                    $id = $_GET['id'];
+                    $sql = "SELECT * FROM todo_tasks WHERE created_by = $id ORDER BY created_at ASC";
                     $result = $conn->query($sql);
                     $latestTask = $result->fetch_all(MYSQLI_ASSOC);
                     ?>
@@ -100,7 +102,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                     <div class="form-group">
                         <label for="bio">Latest task:</label>
                         <?php foreach ($latestTask as $row) : ?>
-                            <p class="alert alert-success"><?php echo $row['title'] . " (Status - " . $row['status'] . ")"; ?></p>
+                            <p class='alert alert-success'><?php echo "<b>".$row['title'] . " (Status - " . $row['status'] . ") <br> </b>". $row['description']?></p>
                         <?php endforeach; ?>
                     </div>
 

@@ -22,6 +22,13 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                             </div>
                         <?php endif; ?>
 
+                        <?php if (isset($_SESSION['profileUpdate_msg'])) : ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Success!</strong> <?php echo $_SESSION['profileUpdate_msg'] ?>
+                                <?php unset($_SESSION['profileUpdate_msg']); ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <?php endif; ?>
                         <h1 class="text-center">All users</h1>
                         <table class="table table-striped">
                             <thead>
@@ -38,9 +45,11 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                                     <tr>
                                         <td> <?php echo $rowcount++; ?></td>
                                         <td> <?php echo $row['first_name'] . " " . $row['last_name'] ?> </td>
-                                        <td> <?php echo $row['role'] ?></td>
+                                        <td> <?php echo ucfirst($row['role']); ?></td>
                                         <td>
-                                            <a type="button" class="btn btn-warning btn-sm" href="edit.php?editid=<?php echo $row['id']; ?>">Edit</a>
+                                            <?php if (isset($row['role']) && $row['role'] == 'member') : ?>
+                                            <a type="button" class="btn btn-warning btn-sm"  href="editProfile.php?id=<?php echo $row['id']. "&source=admin"?>">Edit</a>
+                                            <?php endif; ?>
 
                                             <?php if (isset($row['role']) && $row['role'] == 'member') : ?>
                                                 <form action="delProByadmin_php.php" method="POST">

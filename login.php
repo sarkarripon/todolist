@@ -3,17 +3,20 @@
 if (isset($_SESSION['loggedInUser'])) {
     header('Location:index.php');
     exit;
-}
+    }
 ?>
+
+
 <!-- Begin page content -->
 <section class="vh-100 w-auto p-3" style="background-color: #eee;">
     <main class="flex-shrink-0">
-
-
         <div class="container">
-
-            <?php if (isset($_SESSION['success_msg'])) : ?>
-                <p class="alert alert-success"><?php echo $_SESSION['success_msg'] ?> </p>
+                <?php if (isset($_SESSION['success_msg'])) : ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> <?php echo $_SESSION['success_msg'] ?>
+                    <?php unset($_SESSION['success_msg']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             <?php endif; ?>
 
             <main class="form-signin w-100 m-auto">
