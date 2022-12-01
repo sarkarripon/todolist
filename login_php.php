@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['loginemailErr'] = $loginemailErr;
     }
     if (isset($_POST["loginpassword"]) && !empty($_POST["loginpassword"])) {
-        $loginpassword = $_POST["loginpassword"];
+        $loginpassword = sha1($_POST["loginpassword"]); // receiving pass in hash machanism
         unset($_SESSION['loginpasswordErr']);
     } else {
         $loginpasswordErr = "Put your password";

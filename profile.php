@@ -30,7 +30,7 @@ $rows = $result->fetch_all(MYSQLI_ASSOC);
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <img src="image.jpeg" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                            <img src="<?php echo $row['propic']; ?>" alt="avatar" class="rounded-circle img-fluid" style=" height: 150px; width: 150px ;">
 
                             <h5 class="my-3"><?php echo $row['first_name'] . " " . $row['last_name']; ?></h5>
                             <p class="text-muted mb-1"><?php echo ucfirst($_SESSION['loggedInUser']['role']); ?> since:</p>

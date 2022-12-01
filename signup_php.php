@@ -76,7 +76,7 @@ function dataStore($rows)
     $fname        = $rows["fname"];
     $lname        = $rows["lname"];
     $email        = $rows["email"];
-    $password     = $rows["password"];
+    $password     = sha1($rows["password"]); // sending pass to db in hash machanism
     $member_since = $rows["member_since"];
     $role = "member";
 
